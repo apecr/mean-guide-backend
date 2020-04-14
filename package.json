@@ -1,0 +1,23 @@
+{
+  "name": "mean-guide-backend",
+  "version": "0.0.0",
+  "description": "Backend for the mean stack guide course",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/apecr/mean-guide-backend.git"
+  },
+  "keywords": [
+    "npm-library"
+  ],
+  "author": "Alberto Eyo <alberto.eyo@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/apecr/mean-guide-backend/issues"
+  },
+  "homepage": "https://github.com/apecr/mean-guide-backend#readme"
+}
