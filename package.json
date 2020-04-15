@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/apecr/mean-guide-backend/issues"
   },
-  "homepage": "https://github.com/apecr/mean-guide-backend#readme"
+  "homepage": "https://github.com/apecr/mean-guide-backend#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }

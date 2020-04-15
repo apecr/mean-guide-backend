@@ -1,8 +1,8 @@
 const http = require('http')
+const app = require('./app')
 
-const server = http.createServer((req, res) => {
-  res.end('This is my first response')
-})
-
-server.listen(process.env.POST || 3000)
+const port = process.env.POST || 3000
+app.set('port', port)
+const server = http.createServer(app)
+server.listen(port)
 
