@@ -24,15 +24,20 @@ const storage = multer.diskStorage({
   },
 })
 
-router.post('', multer({storage}).single('image'), (req, res, next) => {
+router.post('', multer({ storage }).single('image'), (req, res, next) => {
+  const urlPath = `${req.protocol}://${req.get('host')}`
   const post = new Post({
     title: req.body.title,
     content: req.body.content,
+    imagePath: `${urlPath}/images/${req.file.filename}`,
   })
   post.save().then((result) => {
     res.status(201).json({
       message: 'Post added successfully',
-      post: result,
+      post: {
+        ...result,
+        id: result._id,
+      },
     })
   })
 })
