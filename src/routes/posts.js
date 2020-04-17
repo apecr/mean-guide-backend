@@ -8,6 +8,10 @@ const MIME_TYPE_MAP = {
   'image/jpg': 'jpg',
 }
 const router = new express.Router()
+const getFilePathFromServer = (req) => {
+  const urlPath = `${req.protocol}://${req.get('host')}`
+  return `${urlPath}/images/${req.file.filename}`
+}
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     const isValid = MIME_TYPE_MAP[file.mimetype]
@@ -25,11 +29,10 @@ const storage = multer.diskStorage({
 })
 
 router.post('', multer({ storage }).single('image'), (req, res, next) => {
-  const urlPath = `${req.protocol}://${req.get('host')}`
   const post = new Post({
     title: req.body.title,
     content: req.body.content,
-    imagePath: `${urlPath}/images/${req.file.filename}`,
+    imagePath: getFilePathFromServer(req),
   })
   post.save().then((result) => {
     res.status(201).json({
@@ -42,19 +45,26 @@ router.post('', multer({ storage }).single('image'), (req, res, next) => {
   })
 })
 
-router.put('/:postId', (req, res, next) => {
-  const post = new Post({
-    _id: req.body.id,
-    title: req.body.title,
-    content: req.body.content,
-  })
-  console.log(post)
-  Post.updateOne({ _id: req.params.postId }, post).then((result) => {
-    res.status(200).json({
-      message: 'Update successful',
+router.put(
+  '/:postId',
+  multer({ storage }).single('image'),
+  (req, res, next) => {
+    console.log(req.file)
+    console.log(JSON.stringify(req.body))
+    const post = new Post({
+      _id: req.body.id,
+      ...req.body,
     })
-  })
-})
+    post.imagePath = req.file ? getFilePathFromServer(req) : req.body.imagePath
+    console.log(post)
+    Post.updateOne({ _id: req.params.postId }, post).then((result) => {
+      res.status(200).json({
+        message: 'Update successful',
+        post: result,
+      })
+    })
+  }
+)
 
 router.get('/:postId', (req, res, next) => {
   Post.findById(req.params.postId).then((post) => {
