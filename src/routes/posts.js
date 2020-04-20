@@ -1,5 +1,5 @@
-const express = require('express')
 const multer = require('multer')
+const express = require('express')
 const Post = require('./../models/post')
 
 const MIME_TYPE_MAP = {
@@ -76,10 +76,22 @@ router.get('/:postId', (req, res, next) => {
 })
 
 router.get('', (req, res, next) => {
-  Post.find().then((docs) => {
-    res.status(200).json({
-      message: 'Posts fetched successfully',
-      posts: docs,
+  const pageSize = +req.query.pagesize
+  const currentPage = +req.query.page
+  console.log(req.query)
+  console.log(pageSize, currentPage)
+  const postQuery = Post.find()
+  if (pageSize && currentPage) {
+    postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize)
+  }
+  postQuery.then((docs) => {
+    return Post.count().then(count => {
+      console.log(docs)
+      res.status(200).json({
+        message: 'Posts fetched successfully',
+        posts: docs,
+        count
+      })
     })
   })
 })
