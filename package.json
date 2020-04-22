@@ -1,6 +1,6 @@
 {
   "name": "mean-guide-backend",
-  "version": "0.2.0-beta.4",
+  "version": "0.2.0-alpha.4",
   "description": "Backend for the mean stack guide course",
   "main": "server.js",
   "scripts": {
