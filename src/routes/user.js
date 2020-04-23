@@ -7,6 +7,11 @@ const secretJWT = process.env.JWT_SECRET
 
 const router = new express.Router()
 
+const generateToken = (user) =>
+  jwt.sign({ email: user.email, userId: user._id }, secretJWT, {
+    expiresIn: '1h',
+  })
+
 router.post('/signup', async(req, res, next) => {
   const hashPassword = await bcrypt.hash(req.body.password, 10)
   const user = new User({
@@ -18,7 +23,7 @@ router.post('/signup', async(req, res, next) => {
     .then((result) => {
       res.status(201).json({
         message: 'User created',
-        user: result,
+        token: generateToken(result)
       })
     })
     .catch((error) => res.status(500).json(error))
@@ -39,13 +44,7 @@ router.post('/login', (req, res, next) => {
             message: 'Auth failed',
           })
         }
-        const token = jwt.sign(
-          { email: user.email, userId: user._id },
-          secretJWT,
-          {
-            expiresIn: '1h',
-          }
-        )
+        const token = generateToken(user)
         return res.status(200).json({
           message: 'Auth ok',
           token,
