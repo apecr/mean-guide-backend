@@ -1,5 +1,6 @@
 const multer = require('multer')
 const express = require('express')
+const checkAuth = require('./../middleware/check-auth')
 const Post = require('./../models/post')
 
 const MIME_TYPE_MAP = {
@@ -28,25 +29,31 @@ const storage = multer.diskStorage({
   },
 })
 
-router.post('', multer({ storage }).single('image'), (req, res, next) => {
-  const post = new Post({
-    title: req.body.title,
-    content: req.body.content,
-    imagePath: getFilePathFromServer(req),
-  })
-  post.save().then((result) => {
-    res.status(201).json({
-      message: 'Post added successfully',
-      post: {
-        ...result,
-        id: result._id,
-      },
+router.post(
+  '',
+  checkAuth,
+  multer({ storage }).single('image'),
+  (req, res, next) => {
+    const post = new Post({
+      title: req.body.title,
+      content: req.body.content,
+      imagePath: getFilePathFromServer(req),
     })
-  })
-})
+    post.save().then((result) => {
+      res.status(201).json({
+        message: 'Post added successfully',
+        post: {
+          ...result,
+          id: result._id,
+        },
+      })
+    })
+  }
+)
 
 router.put(
   '/:postId',
+  checkAuth,
   multer({ storage }).single('image'),
   (req, res, next) => {
     console.log(req.file)
@@ -85,18 +92,18 @@ router.get('', (req, res, next) => {
     postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize)
   }
   postQuery.then((docs) => {
-    return Post.count().then(count => {
+    return Post.count().then((count) => {
       console.log(docs)
       res.status(200).json({
         message: 'Posts fetched successfully',
         posts: docs,
-        count
+        count,
       })
     })
   })
 })
 
-router.delete('/:id', (req, res, next) => {
+router.delete('/:id', checkAuth, (req, res, next) => {
   console.log(req.params.id)
   Post.deleteOne({ _id: req.params.id }).then((result) => {
     res.status(200).json({
