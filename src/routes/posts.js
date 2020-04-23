@@ -92,7 +92,7 @@ router.get('', (req, res, next) => {
     postQuery.skip(pageSize * (currentPage - 1)).limit(pageSize)
   }
   postQuery.then((docs) => {
-    return Post.count().then((count) => {
+    return Post.estimatedDocumentCount().then((count) => {
       console.log(docs)
       res.status(200).json({
         message: 'Posts fetched successfully',
