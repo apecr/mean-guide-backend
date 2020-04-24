@@ -13,6 +13,11 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  creator: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User'
+  }
 })
 
 const Post = mongoose.model('Post', postSchema)

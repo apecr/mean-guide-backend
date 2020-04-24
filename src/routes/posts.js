@@ -38,6 +38,7 @@ router.post(
       title: req.body.title,
       content: req.body.content,
       imagePath: getFilePathFromServer(req),
+      creator: req.userData.userId
     })
     post.save().then((result) => {
       res.status(201).json({
