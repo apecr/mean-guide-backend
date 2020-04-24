@@ -62,6 +62,7 @@ router.put(
     const post = new Post({
       _id: req.body.id,
       ...req.body,
+      creator: req.userData.userId
     })
     post.imagePath = req.file ? getFilePathFromServer(req) : req.body.imagePath
     console.log(post)

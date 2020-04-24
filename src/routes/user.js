@@ -12,6 +12,7 @@ const generateToken = (user) => ({
     expiresIn: '1h',
   }),
   expiresIn: 3600,
+  userId: user._id
 })
 
 router.post('/signup', async(req, res, next) => {
@@ -46,11 +47,9 @@ router.post('/login', (req, res, next) => {
             message: 'Auth failed',
           })
         }
-        const {token, expiresIn} = generateToken(user)
         return res.status(200).json({
           message: 'Auth ok',
-          token,
-          expiresIn
+          ...generateToken(user)
         })
       } catch (error) {
         console.log(error)
