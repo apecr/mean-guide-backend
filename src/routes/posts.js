@@ -38,7 +38,7 @@ router.post(
       title: req.body.title,
       content: req.body.content,
       imagePath: getFilePathFromServer(req),
-      creator: req.userData.userId
+      creator: req.userData.userId,
     })
     post.save().then((result) => {
       res.status(201).json({
@@ -65,11 +65,17 @@ router.put(
     })
     post.imagePath = req.file ? getFilePathFromServer(req) : req.body.imagePath
     console.log(post)
-    Post.updateOne({ _id: req.params.postId }, post).then((result) => {
-      res.status(200).json({
-        message: 'Update successful',
-        post: result,
-      })
+    Post.updateOne(
+      { _id: req.params.postId, creator: req.userData.userId },
+      post
+    ).then((result) => {
+      if (result.n > 0) {
+        return res.status(200).json({
+          message: 'Update successful',
+          post: result,
+        })
+      }
+      res.status(401).json({ message: 'Not Authorized to update the post' })
     })
   }
 )
@@ -106,12 +112,17 @@ router.get('', (req, res, next) => {
 
 router.delete('/:id', checkAuth, (req, res, next) => {
   console.log(req.params.id)
-  Post.deleteOne({ _id: req.params.id }).then((result) => {
-    res.status(200).json({
-      message: `Post ${req.params.id} deleted`,
-      id: result._id,
-    })
-  })
+  Post.deleteOne({ _id: req.params.id, creator: req.userData.userId }).then(
+    (result) => {
+      if (result.n > 0) {
+        return res.status(200).json({
+          message: `Post ${req.params.id} deleted`,
+          id: result._id,
+        })
+      }
+      res.status(401).json({ message: 'Not Authorized to delete the post' })
+    }
+  )
 })
 
 module.exports = router
