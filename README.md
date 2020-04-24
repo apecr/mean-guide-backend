@@ -23,6 +23,10 @@
 
 * More on [JWT][8].
 
+### Section 9 Resources:
+
+* [Mongoose Relations][9] (and how you could combine them when fetching data).
+
 
 [1]: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs
 [2]: https://academind.com/learn/node-js/building-a-restful-api-with/
@@ -32,3 +36,4 @@
 [6]: https://github.com/expressjs/multer
 [7]: https://stackoverflow.com/questions/5539955/how-to-paginate-with-mongoose-in-node-js
 [8]: https://jwt.io/introduction/
+[9]: http://mongoosejs.com/docs/populate.html 
