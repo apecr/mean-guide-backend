@@ -7,6 +7,8 @@ const secretJWT = process.env.JWT_SECRET
 
 const router = new express.Router()
 
+const loginErrorOutput = {message: 'Invalid authentication credentials!'}
+
 const generateToken = (user) => ({
   token: jwt.sign({ email: user.email, userId: user._id }, secretJWT, {
     expiresIn: '1h',
@@ -29,7 +31,7 @@ router.post('/signup', async(req, res, next) => {
         ...generateToken(result)
       })
     })
-    .catch((error) => res.status(500).json(error))
+    .catch((error) => res.status(500).json(loginErrorOutput))
 })
 
 router.post('/login', (req, res, next) => {
@@ -43,9 +45,7 @@ router.post('/login', (req, res, next) => {
       try {
         const result = await bcrypt.compare(req.body.password, user.password)
         if (!result) {
-          return res.status(401).json({
-            message: 'Auth failed',
-          })
+          return res.status(401).json(loginErrorOutput)
         }
         return res.status(200).json({
           message: 'Auth ok',
@@ -56,7 +56,7 @@ router.post('/login', (req, res, next) => {
         return res.status(500).json(error)
       }
     })
-    .catch((error) => res.status(500).json(error))
+    .catch((error) => res.status(500).json(loginErrorOutput))
 })
 
 module.exports = router
