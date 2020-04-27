@@ -1,3 +1,4 @@
+const path = require('path')
 const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
@@ -19,7 +20,8 @@ mongoose
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use('/images', express.static('images'))
+app.use('/images', express.static(path.join(__dirname, 'images')))
+app.use('/', express.static(path.join(__dirname, 'dist', 'mean-guide')))
 
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -36,5 +38,10 @@ app.use((req, res, next) => {
 
 app.use('/api/posts', postsRoutes)
 app.use('/api/user', userRoutes)
+
+// Only include this if you want a only application deploy approach
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, 'dist', 'mean-guide', 'index.html'))
+})
 
 module.exports = app
