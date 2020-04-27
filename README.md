@@ -27,6 +27,10 @@
 
 * [Mongoose Relations][9] (and how you could combine them when fetching data).
 
+### Section 11 Resources:
+
+* [Understanding][10] Environment Variables.
+
 
 [1]: https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs
 [2]: https://academind.com/learn/node-js/building-a-restful-api-with/
@@ -37,3 +41,4 @@
 [7]: https://stackoverflow.com/questions/5539955/how-to-paginate-with-mongoose-in-node-js
 [8]: https://jwt.io/introduction/
 [9]: http://mongoosejs.com/docs/populate.html 
+[10]: https://www.twilio.com/blog/2017/08/working-with-environment-variables-in-node-js.html
